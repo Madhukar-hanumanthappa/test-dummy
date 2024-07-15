@@ -1,0 +1,28 @@
+name: Deploy to Amazon
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  id-token: write
+  contents: read
+       
+  
+jobs:
+  AssumeRole:
+    runs-on: [ ubuntu-latest ]
+    steps: 
+    - name: Clone repository
+      uses: actions/checkout@v4
+
+    - name: Configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::777452866223:role/git-dummy
+        aws-region: us-east-1
+        
+    - name: Login to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v2
+      with:
+        mask-password: 'true'
